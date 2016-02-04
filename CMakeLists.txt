@@ -86,7 +86,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES ros_caffe
 #  CATKIN_DEPENDS roscpp
-#  DEPENDS system_lib
+#  DEPENDS libprotobuf libpthread pthread
 )
 
 ###########
@@ -165,6 +165,10 @@ include_directories(${CAFFE_INCLUDEDIR})
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+# link_directories(${CAFFE_LINK_LIBRARAY})
+# add_executable(ros_caffe_test src/ros_caffe_test.cpp)
+# target_link_libraries(ros_caffe_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} caffe glog)
+
 link_directories(${CAFFE_LINK_LIBRARAY})
-add_executable(ros_caffe_test src/ros_caffe_test.cpp)
-target_link_libraries(ros_caffe_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} caffe glog)
+add_executable(toy_car_forward src/forward_physics_toy_car.cpp)
+target_link_libraries(toy_car_forward ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} caffe glog protobuf pthread )
