@@ -10,7 +10,7 @@
 #include <std_msgs/String.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
-#include "Classifier.h"
+#include "Classifier_toycar.h"
 #include <std_msgs/Float32MultiArray.h>
 
 const std::string RECEIVE_IMG_TOPIC_NAME = "/toy_car_input";
@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
     ros::NodeHandle nh;
     // To receive an image from the topic, PUBLISH_RET_TOPIC_NAME
     ros::Subscriber sub = nh.subscribe(RECEIVE_IMG_TOPIC_NAME, 1, inputCallback);
-	gPublisher = nh.advertise<std_msgs::String>(PUBLISH_RET_TOPIC_NAME, 100);
+	gPublisher = nh.advertise<std_msgs::Float32MultiArray>(PUBLISH_RET_TOPIC_NAME, 100);
     const std::string ROOT_SAMPLE = ros::package::getPath("ros_caffe");
     model_path = ROOT_SAMPLE + "/caffe/examples/toy_car/PhysicsLearner/toycar_2fc_deploy.prototxt";
     weights_path = ROOT_SAMPLE + "/caffe/examples/toy_car/PhysicsLearner/2fc_iter_20001.caffemodel";

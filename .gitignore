@@ -26,3 +26,7 @@
 *.exe
 *.out
 *.app
+
+# Data
+*.tar.gz
+data/*
