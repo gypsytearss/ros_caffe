@@ -163,7 +163,6 @@ This will be the FORWARD PASS operation on input data
 */
 std::vector<float> Classifier::Predict(std::vector<float> input) {
     Blob<float>* input_layer = net_->input_blobs()[0];
-
     input_layer->Reshape(1, num_channels_,
                          input_geometry_.height, input_geometry_.width);
     /* Forward dimension change to all layers. */
@@ -173,7 +172,7 @@ std::vector<float> Classifier::Predict(std::vector<float> input) {
 
     float* input_data = input_layer->mutable_cpu_data();
     for (int i = 0; i < input_layer->channels(); i++) {
-        *input_data = input.at(i);
+        *input_data = input[i];
         input_data += (input_layer->width() * input_layer->height());
     }
 
@@ -181,11 +180,10 @@ std::vector<float> Classifier::Predict(std::vector<float> input) {
 
     /* Copy the output layer to a std::vector */
     Blob<float>* output_layer = net_->output_blobs()[0];
+
     const float* begin = output_layer->cpu_data();
     const float* end = begin + output_layer->channels();
     std::vector<float> retval(begin, end);
-
-    std::cout << "retval[0]: " << retval[0] << std::endl;
 
     return retval;
 }
@@ -199,10 +197,11 @@ std::vector<float> Classifier::Preprocess(std::vector<float> data) {
     int desired_max = 1;
     std::vector<float> normed_data;
     
-    for (int i = 0; i < data.size(); i++) {
+    for (int i = 0; i < data.size()-1; i++) {
         normed_data.push_back((((data[i] - mean_[i] - min_[i]) 
             * (desired_max - desired_min))/(max_[i] - min_[i])) + desired_min);
     }
+    normed_data.push_back(data[data.size()-1]);
     return normed_data;
 }
 
