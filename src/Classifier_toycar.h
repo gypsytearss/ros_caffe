@@ -66,26 +66,24 @@ Classifier::Classifier(const string& model_file,
     Caffe::set_mode(Caffe::GPU);
 #endif
 
-    /* Load the network. */
-    std::cout << std::endl << "got initialized" << std::endl;
+    // Load the network 
     net_.reset(new Net<float>(model_file, TEST));
-    std::cout << std::endl << "got loaded" << std::endl;
+    
+    // Load Weights 
     net_->CopyTrainedLayersFrom(trained_file);
-    std::cout << std::endl << "got weighted" << std::endl;
+    
+    // Get input blob pointer and dimensions of input
     Blob<float>* input_layer = net_->input_blobs()[0];
-    std::cout << std::endl << "got fetched blob" << std::endl;
     num_channels_ = input_layer->channels();
-    std::cout << std::endl << "got channels: " << num_channels_ << std::endl;
     input_geometry_ = cv::Size(input_layer->width(), input_layer->height());
-    std::cout << std::endl << "got dims: "
-            << input_layer->width() << "," << input_layer->height() << std::endl;
-    /* Load the binaryproto mean file. */
+    
+    // Load protobuf blob files for data normalization 
     SetMean(mean_file);
     SetMin(min_file);
     SetMax(max_file);
-    std::cout << std::endl << "got meanminmax" << std::endl;
+
+    // Get output blob pointer
     Blob<float>* output_layer = net_->output_blobs()[0];
-    std::cout << std::endl << "got outputs" << std::endl;
 }
 
 // static bool PairCompare(const std::pair<float, int>& lhs,
